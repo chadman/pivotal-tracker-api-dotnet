@@ -69,6 +69,7 @@
     <Compile Include="Domain\Model\PivotalTask.cs" />
     <Compile Include="Domain\Model\PivotalTaskList.cs" />
     <Compile Include="Domain\Model\PivotalUser.cs" />
+    <Compile Include="Exceptions\WebRequestException.cs" />
     <Compile Include="Util\PivotalFetchOptions.cs" />
     <Compile Include="Util\PivotalFilterHelper.cs" />
     <Compile Include="Util\SerializationHelper.cs" />

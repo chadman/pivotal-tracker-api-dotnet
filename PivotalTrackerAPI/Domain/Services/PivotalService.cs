@@ -67,6 +67,26 @@ namespace PivotalTrackerAPI.Domain.Services
         reader = new StreamReader(response.GetResponseStream());
         xmlDoc.Load(reader);
       }
+      catch (WebException we) {
+
+          PivotalTrackerAPI.Exceptions.WebRequestException exception = new Exceptions.WebRequestException(we.Message);
+
+
+          HttpWebResponse exceptionResponse = ((System.Net.HttpWebResponse)(we.Response));
+
+          // Get the stream associated with the response.
+          Stream receiveStream = exceptionResponse.GetResponseStream();
+
+          // Pipes the stream to a higher level stream reader with the required encoding format. 
+          using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8)) {
+              exception.ErrorXml = readStream.ReadToEnd();
+          }
+
+          exception.StatusCode = (int)response.StatusCode;
+          response.Close();
+
+          throw exception;
+      }
       finally
       {
         if (response != null)
@@ -85,18 +105,41 @@ namespace PivotalTrackerAPI.Domain.Services
     /// <returns>The response from Pivotal</returns>
     public static XmlDocument GetData(string url)
     {
-      var uri = new Uri(url);
-      HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
 
-      Stream objStream;
-      objStream = request.GetResponse().GetResponseStream();
+        try {
+            var uri = new Uri(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
 
-      StreamReader objReader = new StreamReader(objStream);
+            Stream objStream;
+            objStream = request.GetResponse().GetResponseStream();
 
-      XmlDocument xmlDoc = new XmlDocument();
+            StreamReader objReader = new StreamReader(objStream);
 
-      xmlDoc.Load(objReader);
-      return xmlDoc;
+            XmlDocument xmlDoc = new XmlDocument();
+
+            xmlDoc.Load(objReader);
+            return xmlDoc;
+        }
+        catch (WebException we) {
+
+            PivotalTrackerAPI.Exceptions.WebRequestException exception = new Exceptions.WebRequestException(we.Message);
+
+
+            HttpWebResponse response = ((System.Net.HttpWebResponse)(we.Response));
+
+            // Get the stream associated with the response.
+            Stream receiveStream = response.GetResponseStream();
+
+            // Pipes the stream to a higher level stream reader with the required encoding format. 
+            using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8)) {
+                exception.ErrorXml = readStream.ReadToEnd();
+            }
+
+            exception.StatusCode = (int)response.StatusCode;
+            response.Close();
+
+            throw exception;
+        }
     }
 
     /// <summary>
@@ -108,18 +151,40 @@ namespace PivotalTrackerAPI.Domain.Services
     /// <returns>The response from Pivotal</returns>
     public static XmlDocument GetDataWithCredentials(string url, string login, string password)
     {
-      var uri = new Uri(url);
-      HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-      request.Credentials = new NetworkCredential(login, password);
-      Stream objStream;
-      objStream = request.GetResponse().GetResponseStream();
+        try {
+            var uri = new Uri(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Credentials = new NetworkCredential(login, password);
+            Stream objStream;
+            objStream = request.GetResponse().GetResponseStream();
 
-      StreamReader objReader = new StreamReader(objStream);
+            StreamReader objReader = new StreamReader(objStream);
 
-      XmlDocument xmlDoc = new XmlDocument();
+            XmlDocument xmlDoc = new XmlDocument();
 
-      xmlDoc.Load(objReader);
-      return xmlDoc;
+            xmlDoc.Load(objReader);
+            return xmlDoc;
+        }
+        catch (WebException we) {
+
+            PivotalTrackerAPI.Exceptions.WebRequestException exception = new Exceptions.WebRequestException(we.Message);
+
+
+            HttpWebResponse response = ((System.Net.HttpWebResponse)(we.Response));
+
+            // Get the stream associated with the response.
+            Stream receiveStream = response.GetResponseStream();
+
+            // Pipes the stream to a higher level stream reader with the required encoding format. 
+            using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8)) {
+                exception.ErrorXml = readStream.ReadToEnd();
+            }
+
+            exception.StatusCode = (int)response.StatusCode;
+            response.Close();
+
+            throw exception;
+        }
     }
 
     /// <summary>

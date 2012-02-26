@@ -26,7 +26,7 @@ namespace PivotalTrackerAPI.Domain.Model
     /// <param name="members">The members associated with the group</param>
     public PivotalMembershipList(IList<PivotalMembership> members)
     {
-      Memberships = members;
+      Memberships = members.ToList();
     }
 
     #endregion
